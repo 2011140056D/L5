@@ -1,5 +1,9 @@
 <% @tweets.each do |tweet| %>
-    <%= tweet.message %>
+    <% begin %>
+        <%= User.find(tweet.user_id).uid %>: <%= tweet.message %>
+    <% rescue %>
+        存在しないユーザ: <%= tweet.message %>
+    <% end %>
     <%= link_to "削除","/tweets/#{tweet.id}", method: :delete %>
     <br>
 <% end %>
@@ -7,3 +11,5 @@
 <p><%= link_to "ツイートする","/tweets/new" %></p>
 
 <p><%= link_to "logout",top_logout_path %></p>
+
+<%= "ログイン中ID:" + session[:login_uid]%>

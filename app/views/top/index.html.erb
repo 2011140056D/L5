@@ -1,5 +1,9 @@
 <% @tweets.each do |tweet| %>
-    <%= tweet.message %>
+    <% begin %>
+        <%= User.find(tweet.user_id).uid %>: <%= tweet.message %>
+    <% rescue %>
+        存在しないユーザ: <%= tweet.message %>
+    <% end %>
     <br>
 <% end %>
 
