@@ -1,11 +1,52 @@
 <% @tweets.each do |tweet| %>
+    <% flg = 0 %>
+
+    <!-- ツイート表示 --->
     <% begin %>
         <%= User.find(tweet.user_id).uid %>: <%= tweet.message %>
     <% rescue %>
         存在しないユーザ: <%= tweet.message %>
     <% end %>
+    <br>
+    
+    <!-- 良いねしているユーザ検索 -->
+    <% begin %><!-- 誰もいいねしていない場合errorが出るのを回避 -->
+        <!-- u:良いねしているユーザ --->
+        <!-- array:良いねしているユーザの配列 --->
+        <% array=[] %>
+        <% u = @Likes.where(tweet_id: tweet.id) %>
+        <% u.each do |u2| %>
+            <% array.push(User.find(u2.user_id).uid) %>
+            <!-- もしいいねしていたらflg true --->
+            <% if User.find(u2.user_id).uid == session[:login_uid] %>
+                <% flg = 1 %>
+            <% end %>
+        <% end %>
+        
+    <% rescue %>
+        <% u = 404 %>
+    <% end %>
+    
+    <!-- 表示 --->
+    <% if flg == 1 %>
+        <%= link_to "いいね削除",like_path(tweet), method: :delete %>
+    <% else %>
+        <%= link_to "いいね",likes_path(tweet_id: tweet.id), method: :post %>
+    <% end %>
+    
     <%= link_to "削除","/tweets/#{tweet.id}", method: :delete %>
     <br>
+    <!-- いいね表示 -->
+    <% if not(u==404) %>
+        <% array.each do |a| %>
+            <%= a %>
+        <% end %>
+        がいいねしました。
+    <% else %>
+        error
+    <% end %>
+    <br><br>
+    <% flg = 0 %>
 <% end %>
 
 <p><%= link_to "ツイートする","/tweets/new" %></p>
