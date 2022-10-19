@@ -2,11 +2,7 @@
     <% flg = 0 %>
 
     <!-- ツイート表示 --->
-    <% begin %>
-        <%= User.find(tweet.user_id).uid %>: <%= tweet.message %>
-    <% rescue %>
-        存在しないユーザ: <%= tweet.message %>
-    <% end %>
+    <%= User.find(tweet.user_id).uid %>: <%= tweet.message %>
     <br>
     
     <!-- 良いねしているユーザ検索 -->
@@ -18,7 +14,7 @@
         <% u.each do |u2| %>
             <% array.push(User.find(u2.user_id).uid) %>
             <!-- もしいいねしていたらflg true --->
-            <% if User.find(u2.user_id).uid == session[:login_uid] %>
+            <% if User.find(u2.user_id) == current_user %>
                 <% flg = 1 %>
             <% end %>
         <% end %>
@@ -53,4 +49,4 @@
 
 <p><%= link_to "logout",top_logout_path %></p>
 
-<%= "ログイン中ID:" + session[:login_uid]%>
+<%= "ログイン中ID:" + current_user.uid %>

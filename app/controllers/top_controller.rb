@@ -7,7 +7,7 @@ class TopController < ApplicationController
     @tweets = Tweet.all
     @Users = User.all
     @Likes = Like.all
-    if session[:login_uid]
+    if current_user
       render "main"
     else
       render "login_form"
