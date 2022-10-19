@@ -1,7 +1,7 @@
 class Tweet < ApplicationRecord
     belongs_to :user
     
-    validates :user_id, presence: true
+    validates :message, :user_id, presence: true
     
     has_many :likes, dependent: :destroy#ツイートを消すといいねも消える
     has_many :like_users, through: :likes, source: :user

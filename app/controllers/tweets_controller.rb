@@ -9,8 +9,11 @@ class TweetsController < ApplicationController
   
   def create
     @tweet = Tweet.new(message: params[:tweet][:message],user_id: current_user.id)
-    @tweet.save
-    redirect_to controller: :top, action: :main
+    if @tweet.save
+      redirect_to controller: :top, action: :main
+    else
+      render "new"
+    end
   end
   
   def destroy
